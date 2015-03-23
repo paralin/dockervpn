@@ -20,34 +20,44 @@ var launchVpn = function(){
 
   vpn = spawn(__dirname + '/vpn.sh');
 
+  var nserverinfo = false;
   vpn.stdout.on('data', function(chunk){
-    var str = chunk.toString('utf8');
+    var data = chunk.toString('utf8');
+    var lines = data.split("\n");
 
-    var idx = str.indexOf("Connecting to:");
-    if(idx > -1)
-    {
-      status.server_info = str.substring(str.indexOf("\n")+1).replace("\t", ", ");
-      status.server_info = status.server_info.substring(0, status.server_info.indexOf("\n"));
-      console.log("Server info: "+status.server_info);
-    }
+    lines.forEach(function(line){
+      var str = line;
+      var idx = str.indexOf("Connecting to:");
+      if(idx > -1)
+        nserverinfo = true;
+      else
+      {
+        if(nserverinfo)
+        {
+          status.server_info = line.replace("\t", ", ");
+          console.log("Server info: "+status.server_info);
+        }
+        nserverinfo = false;
+      }
 
-    if(str.indexOf("You are now connected to HMA") > -1)
-    {
-      console.log("Connected to the VPN.");
-      status.connected = true;
-    }
+      if(str.indexOf("You are now connected to HMA") > -1)
+      {
+        console.log("Connected to the VPN.");
+        status.connected = true;
+      }
 
-    if(status.server_info !== "unknown" && str.indexOf("Your IP is") > -1)
-    {
-      status.last_ip = status.ip;
-      status.ip      = str.substring(11, str.length-1);
-      if(status.last_ip === "unknown")
+      if(status.server_info !== "unknown" && str.indexOf("Your IP is") > -1)
+      {
         status.last_ip = status.ip;
+        status.ip      = str.substring(11, str.length-1);
+        if(status.last_ip === "unknown")
+          status.last_ip = status.ip;
 
-      console.log("Current IP is: "+status.ip);
-    }
+        console.log("Current IP is: "+status.ip);
+      }
 
-    console.log(str);
+      console.log(str);
+    });
   });
 
   vpn.stderr.on('data', function(chunk){

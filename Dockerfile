@@ -8,7 +8,7 @@ ADD *.sh /root/
 ADD *.js* /root/
 RUN cd /root/ && ls && npm install
 
-CMD cd && service ssh restart && ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -f -N -D 0.0.0.0:10023 localhost && node server.js
+CMD cd && service ssh restart && ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -f -N -D 0.0.0.0:1080 localhost && node server.js
 
 ENV PORT 80
-EXPOSE 80
+EXPOSE 80 1080

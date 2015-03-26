@@ -97,10 +97,11 @@ app.post('/:secret?', function(req, res){
     res.json({error: "Invalid secret."});
   }else if(!status.connected)
   {
-    res.status(403);
-    res.json({status: "not connected yet"});
+    res.status(200);
+    res.json({status: "connecting"});
   }
   else{
+    res.status(200);
     console.log("=== restarting vpn due to request ===");
     restartVpn();
     res.json({status: "restarted"});

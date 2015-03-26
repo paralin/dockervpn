@@ -1,3 +1,3 @@
 #!/bin/bash
 
-kill `pidof openvpn`
+killall openvpn

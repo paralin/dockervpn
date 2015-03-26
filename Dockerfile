@@ -1,7 +1,7 @@
 FROM debian:jessie
 MAINTAINER Christian Stewart
 
-RUN apt-get update && apt-get install -y openvpn curl unzip wget sudo openssh-client openssh-server
+RUN apt-get update && apt-get install -y openvpn curl unzip wget sudo openssh-client openssh-server psmisc
 RUN curl -sL https://deb.nodesource.com/setup | sudo bash - && apt-get install -y nodejs && apt-get clean
 RUN cd /root/ && mkdir .ssh/ && cd .ssh/ && ssh-keygen -f id_rsa -t rsa -N '' && cd .. && cat .ssh/id_rsa.pub >> .ssh/authorized_keys && chmod 700 ~/.ssh && chmod 600 ~/.ssh/*
 ADD *.sh /root/

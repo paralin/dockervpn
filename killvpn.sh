@@ -1,3 +1,3 @@
 #!/bin/bash
 
-killall openvpn
+killall openvpn || true

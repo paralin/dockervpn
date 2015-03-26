@@ -1,5 +1,6 @@
 var express = require('express');
 var spawn   = require('child_process').spawn;
+var _       = require('lodash');
 
 var SECRET = process.env.API_SECRET || "test";
 
@@ -12,7 +13,7 @@ var status = {
 };
 
 var vpn;
-var launchVpn = function(){
+var launchVpn = _.debounce(function(){
   status.connected    = false;
   status.server_info  = "unknown";
   status.ip           = "unknown";
@@ -69,7 +70,7 @@ var launchVpn = function(){
     console.log("vpn exited");
     launchVpn();
   });
-};
+}, 300);
 
 var restartVpn = function(){
   status.connected = false;

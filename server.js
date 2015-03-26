@@ -72,6 +72,7 @@ var launchVpn = function(){
 };
 
 var restartVpn = function(){
+  status.connected = false;
   kill = spawn(__dirname + '/killvpn.sh');
   kill.on('exit', function(){
     console.log("kill vpn exited");
